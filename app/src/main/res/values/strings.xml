@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">元视SDK</string>
+    <string name="get_picture_failed">获取图片失败</string>
+    <string name="permission_denied">权限被拒绝！</string>
+</resources>
