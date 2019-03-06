@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,12 +23,18 @@ import android.widget.Toast;
 import com.lichao.http.CallDeleteTemplate;
 import com.lichao.http.CallInsertTemplate;
 import com.lichao.http.CallQueryTemplate;
+import com.lichao.http.CallSettingServer;
 import com.lichao.utils.ImageUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     Button btDelete;
     @BindView(R.id.bt_select)
     Button btSelect;
+    @BindView(R.id.bt_base64)
+    Button btBase64;
     @BindView(R.id.iv_image)
     ImageView ivImage;
 
@@ -124,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.bt_query, R.id.bt_add, R.id.bt_delete, R.id.bt_select})
+    @OnClick({R.id.bt_query, R.id.bt_add, R.id.bt_delete, R.id.bt_select, R.id.bt_base64})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_query:
@@ -138,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_select:
                 chooseLocalImage(view);
+                break;
+            case R.id.bt_base64:
+                CallSettingServer.settingServer("192.168.1.195", "8088", "guns/getAttendance", "guns/heartbeat", "guns/imgreg");
                 break;
         }
     }
@@ -178,5 +190,66 @@ public class MainActivity extends AppCompatActivity {
         byte[] bytes = bStream.toByteArray();
         string = Base64.encodeToString(bytes, Base64.DEFAULT);
         return string;
+    }
+
+    public static Bitmap stringtoBitmap(String string) {
+        //将字符串转换成Bitmap类型
+        Bitmap bitmap = null;
+        try {
+            byte[] bitmapArray;
+            bitmapArray = Base64.decode(string, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    /**
+     * Base64转图片(去掉字符串的data:image/png;base64,)
+     * @param string
+     * @return
+     */
+    public static Bitmap stringToBitmap(String string) {
+        Bitmap bitmap = null;
+        try {
+            byte[] bitmapArray = Base64.decode(string.split(",")[1], Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    /**
+     * base64编码字符集转化成图片文件。
+     *
+     * @param base64Str
+     * @param path      文件存储路径
+     * @return 是否成功
+     */
+    public static boolean base64ToFile(String base64Str, String path) {
+        byte[] data = Base64.decode(base64Str, Base64.DEFAULT);
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] < 0) {
+                //调整异常数据
+                data[i] += 256;
+            }
+        }
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(path);
+            os.write(data);
+            os.flush();
+            os.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

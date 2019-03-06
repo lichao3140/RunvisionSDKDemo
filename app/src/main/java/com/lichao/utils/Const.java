@@ -5,7 +5,7 @@ public class Const {
     /**
      * 服务器地址
      */
-    private static String SERVER_IP = "http://192.168.1.130:8088/";
+    private static String SERVER_IP = "http://192.168.1.129:8088/";
 
     /**
      * 查询模板
@@ -21,4 +21,9 @@ public class Const {
      * 添加模板
      */
     public static String DELETE_TEMP =  SERVER_IP + "newDeleteTemplate?";
+
+    /**
+     * 服务器地址配置
+     */
+    public static String SETTING_SERVER =  SERVER_IP + "updateServerConfig?";
 }
