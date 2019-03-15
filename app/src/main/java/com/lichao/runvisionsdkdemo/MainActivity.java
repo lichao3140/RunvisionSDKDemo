@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 
 import com.lichao.http.CallDeleteTemplate;
 import com.lichao.http.CallInsertTemplate;
+import com.lichao.http.CallQueryRecord;
 import com.lichao.http.CallQueryTemplate;
 import com.lichao.http.CallSettingServer;
 import com.lichao.utils.ImageUtil;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     Button btDelete;
     @BindView(R.id.bt_select)
     Button btSelect;
+    @BindView(R.id.bt_query_record)
+    Button btQueryRecord;
     @BindView(R.id.bt_base64)
     Button btBase64;
     @BindView(R.id.iv_image)
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.bt_query, R.id.bt_add, R.id.bt_delete, R.id.bt_select, R.id.bt_base64})
+    @OnClick({R.id.bt_query, R.id.bt_add, R.id.bt_delete, R.id.bt_select, R.id.bt_query_record, R.id.bt_base64})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_query:
@@ -147,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_select:
                 chooseLocalImage(view);
+                break;
+            case R.id.bt_query_record:
+                CallQueryRecord.queryRecord("李超", "2222222");
                 break;
             case R.id.bt_base64:
                 CallSettingServer.settingServer("192.168.1.195", "8088", "guns/getAttendance", "guns/heartbeat", "guns/imgreg");
@@ -207,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Base64转图片(去掉字符串的data:image/png;base64,)
+     *
      * @param string
      * @return
      */

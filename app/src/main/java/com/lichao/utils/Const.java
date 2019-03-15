@@ -23,7 +23,13 @@ public class Const {
     public static String DELETE_TEMP =  SERVER_IP + "newDeleteTemplate?";
 
     /**
+     * 访客记录
+     */
+    public static String QUERY_RECORED =  SERVER_IP + "newQueryRecord?";
+
+    /**
      * 服务器地址配置
      */
     public static String SETTING_SERVER =  SERVER_IP + "updateServerConfig?";
+
 }
