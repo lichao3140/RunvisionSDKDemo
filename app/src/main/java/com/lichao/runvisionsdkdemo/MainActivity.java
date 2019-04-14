@@ -24,6 +24,7 @@ import com.lichao.http.CallInsertTemplate;
 import com.lichao.http.CallQueryRecord;
 import com.lichao.http.CallQueryTemplate;
 import com.lichao.http.CallSettingServer;
+import com.lichao.utils.ImageProcessHelper;
 import com.lichao.utils.ImageUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
      * 被处理的图片
      */
     private Bitmap mBitmap = null;
+    private ImageProcessHelper imageProcessHelper;
 
     @BindView(R.id.bt_query)
     Button btQuery;
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initView();
+        imageProcessHelper = ImageProcessHelper.getInstance();
 
         /**
          * 在选择图片的时候，在android 7.0及以上通过FileProvider获取Uri，不需要文件权限
@@ -155,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_base64:
                 CallSettingServer.settingServer("192.168.1.195", "8088", "guns/getAttendance", "guns/heartbeat", "guns/imgreg");
+//                ivImage.setImageBitmap(imageProcessHelper.brightenBitmap(mBitmap, 50));
                 break;
         }
     }
